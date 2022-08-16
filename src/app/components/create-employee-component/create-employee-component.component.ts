@@ -9,34 +9,76 @@ import { FormGroup,FormControl, FormBuilder,Validators } from "@angular/forms";
 export class CreateEmployeeComponentComponent implements OnInit {
 employeeForm: FormGroup
 fullnamelength = 0
+submitted = false;
+formErrors = {
+  'fullName': '',
+  'email': '',
+  'skillName': '',
+  'experienceInYears': '',
+  'proficiency': ''
+};
+validationMessages = {
+  'fullName': {
+    'required': 'Full Name is required.',
+    'minlength': 'Full Name must be greater than 2 characters.',
+    'maxlength': 'Full Name must be less than 10 characters.'
+  },
+  'email': {
+    'required': 'Email is required.'
+  },
+  'skillName': {
+    'required': 'Skill Name is required.',
+  },
+  'experienceInYears': {
+    'required': 'Experience is required.',
+  },
+  'proficiency': {
+    'required': 'Proficiency is required.',
+  },
+};
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.employeeForm = this.fb.group({
       fullName: ['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
-      email: [''],
+      email: ['',Validators.required],
       skills: this.fb.group({
-        skillName: [''],
-        experienceInYears: [''],
-        proficiency: ['']
+        skillName: ['', Validators.required],
+        experienceInYears: ['',Validators.required],
+        proficiency: ['',Validators.required]
       })
     })
-    // this.employeeForm.valueChanges.subscribe((value:any)=>{
-    //  console.log(JSON.stringify(value))
-    // })
-  }
-  onSubmit(){
-    console.log(this.employeeForm.value)
-  }
-  onLoadDataClick(){
-    this.employeeForm.patchValue({
-      fullName: 'Pragim technologies',
-      email: 'Pragim technologies',
-      skills: {
-       skillName : 'c#',
-       experienceInYears: 5,
-       proficiency: 'beginner' 
-      }
+    this.employeeForm.valueChanges.subscribe(data=>{
+      this.logValidationErrors()
     })
   }
+  onSubmit(){
+    this.submitted = true
+    this.logValidationErrors()
+
+    console.log(this.formErrors)
+  }
+  logValidationErrors(group:FormGroup = this.employeeForm){
+    Object.keys(group.controls).forEach((key:string) => {
+    const abstractControl = group.get(key);
+    if(abstractControl instanceof FormGroup){
+      this.logValidationErrors(abstractControl)
+    }else{
+      this.formErrors[key] = ''
+      if(abstractControl && !abstractControl.valid && 
+        (abstractControl.touched || abstractControl.dirty||this.submitted)){
+           const messages = this.validationMessages[key]
+      for(const errorKey in abstractControl.errors){
+        if(errorKey){
+          this.formErrors[key]+=messages[errorKey] + '';
+        }
+      }
+      }
+    }
+  });
+  }
+  onLoadDataClick(){
+  console.log(this.formErrors)
+  }
+  
 }

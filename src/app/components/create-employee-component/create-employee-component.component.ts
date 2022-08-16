@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup,FormControl, FormBuilder,Validators } from "@angular/forms";
+import { FormGroup,FormControl, FormBuilder,Validators, FormArray } from "@angular/forms";
 
 @Component({
   selector: 'app-create-employee-component',
@@ -42,20 +42,24 @@ validationMessages = {
     this.employeeForm = this.fb.group({
       fullName: ['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
       email: ['',Validators.required],
-      skills: this.fb.group({
-        skillName: ['', Validators.required],
-        experienceInYears: ['',Validators.required],
-        proficiency: ['',Validators.required]
-      })
+      skills: this.fb.array([
+        this.addSkillFormGroup()
+      ])
     })
     this.employeeForm.valueChanges.subscribe(data=>{
       this.logValidationErrors()
     })
   }
+  addSkillFormGroup(): FormGroup{
+    return  this.fb.group({
+      skillName: ['', Validators.required],
+      experienceInYears: ['',Validators.required],
+      proficiency: ['',Validators.required]
+    })
+  }
   onSubmit(){
     this.submitted = true
     this.logValidationErrors()
-
     console.log(this.formErrors)
   }
   logValidationErrors(group:FormGroup = this.employeeForm){
@@ -63,10 +67,19 @@ validationMessages = {
     const abstractControl = group.get(key);
     if(abstractControl instanceof FormGroup){
       this.logValidationErrors(abstractControl)
-    }else{
+    }
+    else if(abstractControl instanceof FormArray){
+      for(const control of abstractControl.controls){
+        if(control instanceof FormGroup){
+          this.logValidationErrors(control)
+        }
+      }
+     
+    }
+    else{
       this.formErrors[key] = ''
       if(abstractControl && !abstractControl.valid && 
-        (abstractControl.touched || abstractControl.dirty||this.submitted)){
+        (abstractControl.touched || abstractControl.dirty ||this.submitted)){
            const messages = this.validationMessages[key]
       for(const errorKey in abstractControl.errors){
         if(errorKey){
@@ -78,7 +91,19 @@ validationMessages = {
   });
   }
   onLoadDataClick(){
-  console.log(this.formErrors)
+    const formArray1 = new FormArray([
+      new FormControl('John',Validators.required),
+      new FormGroup({
+        country: new FormControl('',Validators.required)
+      }),
+      new FormArray([])
+    ])
+    const formArray2 = this.fb.array([
+      new FormControl('John',Validators.required),
+      new FormControl('IT',Validators.required),
+      new FormControl('',Validators.required)
+    ])
+    console.log(formArray1.value)
   }
   
 }

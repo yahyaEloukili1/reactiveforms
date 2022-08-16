@@ -24,57 +24,58 @@
           </div>
 
         </div>
-        <div formGroupName="skills">
-          <div class="form-group" >
-            <label class="col-sm-2 control-label" for="skillName">
-              Skill
-            </label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="skillName"
-                  placeholder="Name" formControlName="skillName"
-                  (blur)="logValidationErrors()"
-                  [ngClass]="{'is-invalid': formErrors.skillName}">
-                  <div *ngIf="formErrors.skillName"
-                  class="text-danger">{{formErrors.skillName}}</div>
+        <div formArrayName="skills">
+          <div formGroupName="0">
+            <div class="form-group" >
+              <label class="col-sm-2 control-label" for="skillName">
+                Skill
+              </label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="skillName"
+                    placeholder="Name" formControlName="skillName"
+                    (blur)="logValidationErrors()"
+                    [ngClass]="{'is-invalid': formErrors.skillName}">
+                    <div *ngIf="formErrors.skillName"
+                    class="text-danger">{{formErrors.skillName}}</div>
+              </div>
+              <label class="col-sm-2 control-label" for="experienceInYears">
+                experienceInYears
+              </label>
+              <div class="col-sm-4">
+                <input type="text" placeholder="Experience in Years"
+                [ngClass]="{'is-invalid': formErrors.experienceInYears}"
+                (blur)="logValidationErrors()"
+                    class="form-control" formControlName="experienceInYears">
+                    <div *ngIf="formErrors.experienceInYears"
+                    class="text-danger">{{formErrors.experienceInYears}}</div>
+              </div>
             </div>
-            <label class="col-sm-2 control-label" for="experienceInYears">
-              experienceInYears
-            </label>
-            <div class="col-sm-4">
-              <input type="text" placeholder="Experience in Years"
-              [ngClass]="{'is-invalid': formErrors.experienceInYears}"
-              (blur)="logValidationErrors()"
-                  class="form-control" formControlName="experienceInYears">
-                  <div *ngIf="formErrors.experienceInYears"
-                  class="text-danger">{{formErrors.experienceInYears}}</div>
+          
+            <div class="form-group">
+              <label class="col-md-2 control-label">Proficiency</label>
+              <div class="col-md-8">
+                <label class="radio-inline">
+                  <input id="proficiency" type="radio" value="beginner"
+                         formControlName="proficiency"
+                         [ngClass]="{'is-invalid': formErrors.experienceInYears}"
+                         (blur)="logValidationErrors()">Beginner
+                </label>
+                <label class="radio-inline">
+                  <input id="proficiency" type="radio" value="intermediate"
+                         formControlName="proficiency">Intermediate
+                </label>
+                <label class="radio-inline">
+                  <input id="proficiency" type="radio" value="advanced"
+                         formControlName="proficiency">Advanced
+                </label>
+                <div *ngIf="formErrors.proficiency"
+                class="text-danger">{{formErrors.proficiency}}</div>
+              </div>
+             
             </div>
           </div>
-        
-          <div class="form-group">
-            <label class="col-md-2 control-label">Proficiency</label>
-            <div class="col-md-8">
-              <label class="radio-inline">
-                <input id="proficiency" type="radio" value="beginner"
-                       formControlName="proficiency"
-                       [ngClass]="{'is-invalid': formErrors.experienceInYears}"
-                       (blur)="logValidationErrors()">Beginner
-              </label>
-              <label class="radio-inline">
-                <input id="proficiency" type="radio" value="intermediate"
-                       formControlName="proficiency">Intermediate
-              </label>
-              <label class="radio-inline">
-                <input id="proficiency" type="radio" value="advanced"
-                       formControlName="proficiency">Advanced
-              </label>
-              <div *ngIf="formErrors.proficiency"
-              class="text-danger">{{formErrors.proficiency}}</div>
-            </div>
-           
-          </div>
- 
-        
         </div>
+     
       </div>
       <div class="panel-footer">
         <button class="btn btn-primary" type="submit">Save</button>&nbsp;&nbsp;

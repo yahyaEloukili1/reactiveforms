@@ -50,7 +50,12 @@ validationMessages = {
       this.logValidationErrors()
     })
   }
-  addSkillFormGroup(): FormGroup{
+  addSkillButtonClick(): void{
+
+   (<FormArray> this.employeeForm.get('skills')).push(this.addSkillFormGroup());
+ 
+  }
+  addSkillFormGroup():FormGroup{
     return  this.fb.group({
       skillName: ['', Validators.required],
       experienceInYears: ['',Validators.required],
@@ -59,8 +64,9 @@ validationMessages = {
   }
   onSubmit(){
     this.submitted = true
-    this.logValidationErrors()
-    console.log(this.formErrors)
+     this.logValidationErrors()
+     console.log('rrrrrrrrrrrrrrr')
+  
   }
   logValidationErrors(group:FormGroup = this.employeeForm){
     Object.keys(group.controls).forEach((key:string) => {

@@ -24,7 +24,8 @@
           </div>
 
         </div>
-        <div formArrayName="skills">
+        <button class="btn btn-primary" type='button' (click)="addSkillButtonClick()">Add skill</button>
+        <div formArrayName="skills" *ngFor="let skill of this.employeeForm.get('skills')['controls']">
           <div formGroupName="0">
             <div class="form-group" >
               <label class="col-sm-2 control-label" for="skillName">
@@ -75,6 +76,7 @@
             </div>
           </div>
         </div>
+
      
       </div>
       <div class="panel-footer">
